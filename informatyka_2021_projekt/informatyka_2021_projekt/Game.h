@@ -3,31 +3,73 @@
 #include <iostream>
 #include <Windows.h>
 #include <cstdlib>
-#include <ctime>
+#include <time.h>
 #include <stdio.h>
 #include <string>
 #include <vector>
 #include <array>
 #include <fstream>
+#include <sstream>
+#include <map>
 
-#include "Player.h";
+#include "Player.h"
+#include "Shot.h"
+#include "Enemy.h"
 
 class Game
 {
 private:
+	//window
+	sf::RenderWindow* window;
+
+	//Resources
+	std::map<std::string, sf::Texture*> textures;
+	std::vector<Shot*> shots;							//Shot* because we are creating new projectiles, not copying 1.
+
+	//GUI
+	sf::Font font;
+	sf::Text pointText;
+
+	//Background
+	sf::Texture backgroundTexture;
+	sf::Sprite background;
+
+	//System
+	unsigned points;
+
 	//creating player
 	Player* player;
-	sf::RenderWindow* window;
+
+	//Enemy
+	float spawnTimer;		
+	float spawnTimerMax;
+	std::vector<Enemy*> enemies;
+
 	void initWindow();
+	void initTextures();
+	void initGUI();
+	void initBackground();
+	void initSystems();
 	void initPlayer();
+	void initEnemies();
 
 public:
 	Game();
 	virtual ~Game();
 
-	// Metody
+	// functions
 	void run();
+	void updatePollEvents();
+	void updateInput();
+	void updateGUI();
+	void updateWorld();
+	void updateCollision();
+	void updateShots();
+	void updateEnemies();
+	void updateCombat();
 	void update();
+	void renderGUI();
+	void renderBackground();
 	void render();
 };
 

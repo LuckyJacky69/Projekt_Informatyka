@@ -1,6 +1,14 @@
 #include "Player.h"
 #include <iostream>
 
+//ms inicjation
+void Player::initVariables()
+{
+	this->movementSpeed = 2.f;
+	this->attackCooldownMax = 20.f;
+	this->attackCooldown = this->attackCooldownMax;
+}
+
 void Player::initTexture()
 {
 	//loading texture from file
@@ -22,7 +30,7 @@ void Player::initSprite()
 
 Player::Player()
 {
-	this->movementSpeed = 2.f;
+	this->initVariables(); 
 	this->initTexture();
 	this->initSprite();
 }
@@ -31,15 +39,52 @@ Player::~Player()
 {
 
 }
+//creating projectile position same as player's.
+const sf::Vector2f& Player::getPos() const
+{
+	return this->sprite.getPosition();
+}
+
+// is that important?
+const sf::FloatRect Player::getBounds() const
+{
+	return this->sprite.getGlobalBounds();
+}
+void Player::setPosition(const sf::Vector2f pos)
+{
+	this->sprite.setPosition(pos);
+}
+void Player::setPosition(const float x, const float y)
+{
+	this->sprite.setPosition(x, y);
+}
+
 //direction control
 void Player::move(const float dirX, const float dirY)
 {
 	this->sprite.move(this->movementSpeed*dirX, this->movementSpeed*dirY);
 }
 //func
+
+const bool Player::canAttack()
+{
+	if (this->attackCooldown >= this->attackCooldownMax)
+	{
+		this->attackCooldown = 0.f;
+		return true;
+	}
+	else return false;	
+}
+
+void Player::updateAttack()
+{
+	if(this->attackCooldown<this->attackCooldownMax)
+		this->attackCooldown += 0.5f;
+}
+
 void Player::update()
 {
-
+	this->updateAttack();
 }
 
 void Player::render(sf::RenderTarget& target)
