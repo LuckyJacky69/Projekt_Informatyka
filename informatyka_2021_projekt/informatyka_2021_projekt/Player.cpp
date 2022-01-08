@@ -7,6 +7,8 @@ void Player::initVariables()
 	this->movementSpeed = 2.f;
 	this->attackCooldownMax = 20.f;
 	this->attackCooldown = this->attackCooldownMax;
+	this->hpMax = 100;
+	this->hp = this->hpMax;
 }
 
 void Player::initTexture()
@@ -45,20 +47,42 @@ const sf::Vector2f& Player::getPos() const
 	return this->sprite.getPosition();
 }
 
-// is that important?
+
 const sf::FloatRect Player::getBounds() const
 {
 	return this->sprite.getGlobalBounds();
 }
+
+const int& Player::getHp() const
+{
+	return this->hp;
+}
+
+const int& Player::getHpMax() const
+{
+	return this->hpMax;
+}
+
+// is that important?
 void Player::setPosition(const sf::Vector2f pos)
 {
 	this->sprite.setPosition(pos);
 }
+
 void Player::setPosition(const float x, const float y)
 {
 	this->sprite.setPosition(x, y);
 }
-
+void Player::setHp(const int hp)
+{
+	this->hp = hp;
+}
+void Player::loseHp(const int value)
+{
+	this->hp -= value;
+	if (this->hp <= 0)
+		this->hp = 0;
+}
 //direction control
 void Player::move(const float dirX, const float dirY)
 {

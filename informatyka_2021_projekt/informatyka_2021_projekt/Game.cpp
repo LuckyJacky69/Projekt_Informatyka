@@ -28,6 +28,19 @@ void Game::initGUI()
 	this->pointText.setCharacterSize(18);
 	this->pointText.setFillColor(sf::Color::White);
 	//this->pointText.setString("Witam");
+
+	this->gameoverText.setFont(this->font);
+	this->gameoverText.setCharacterSize(60);
+	this->gameoverText.setFillColor(sf::Color::Red);
+	this->gameoverText.setPosition(sf::Vector2f(180.f, 180.f));
+	this->gameoverText.setString("Gameover!");
+
+	//Player hp' bar
+	this->playerHpBar.setSize(sf::Vector2f(150.f, 10.f));
+	this->playerHpBar.setFillColor(sf::Color::Red);
+	this->playerHpBar.setPosition(sf::Vector2f(0.f, 30.f));
+	this->playerHpBarBack = this->playerHpBar;
+	this->playerHpBarBack.setFillColor(sf::Color(125,25,25,200));
 }
 
 void Game::initBackground()
@@ -91,9 +104,12 @@ Game::~Game()
 
 void Game::run()
 {
-	while (this->window->isOpen()) 
+	while (this->window->isOpen() ) 
 	{
-		this->update();
+		this->updatePollEvents();
+
+		if(this->player-> getHp() > 0)
+			this->update();
 		this->render();
 	}		
 }
@@ -136,6 +152,9 @@ void Game::updateGUI()
 	std::stringstream ss;
 	ss << "Score: "<<this->points;
 	this->pointText.setString(ss.str());
+	float hpPercent = static_cast<float>(this->player->getHp()) / this->player->getHpMax();
+	this->playerHpBar.setSize(sf::Vector2f(150.f * hpPercent, this->playerHpBar.getSize().y));
+
 }
 
 void Game::updateWorld()
@@ -205,37 +224,45 @@ void Game::updateEnemies()
 	{
 		enemy->update();
 
-		//shot culling on the edge of right screen
-
 		if (enemy->getBounds().left + enemy->getBounds().width < -100.f)
 		{
-			//deleting projectile (erasing memory)
+			//deleting enemy (erasing memory) as they reach -100 width
 
 			delete this->enemies.at(counter);
 			this->enemies.erase(this->enemies.begin() + counter);
-			--counter;
-
+			
+			//--counter;
 			//checking ^std::cout <<this->shots.size() <<"\n";
 		}
+		else if(enemy->getBounds().intersects(this->player->getBounds()))
+		{
+			//deleting enemy (erasing memory) as they interact with player's position
+			this->player->loseHp(this->enemies.at(counter)->getDamage());
+			delete this->enemies.at(counter);
+			this->enemies.erase(this->enemies.begin() + counter);
+			--counter;
+		}
+
 		++counter;
 	}
 }
 void Game::updateCombat()
 {
 
-	for (int i = 0; i < this->enemies.size(); i++)			//for each enemy, removing by projectile or behind left side
+	for (int i = 0; i < this->enemies.size(); i++)			//each enemy removed by projectile 
 	{
 		bool enemy_deleted = false;
 		for (size_t k = 0; k < this->shots.size() && enemy_deleted==false; k++)
 		{
 			if (this->enemies[i]->getBounds().intersects(this->shots[k]->getBounds()))
 			{
+				this->points += this->enemies[i]->getPoints();
+
 				delete this->enemies[i];
 				this->enemies.erase(this->enemies.begin() + i);
 
 				delete this->shots[k];
 				this->shots.erase(this->shots.begin() + k);
-
 				enemy_deleted = true;
 			}
 		}
@@ -245,8 +272,6 @@ void Game::updateCombat()
 
 void Game::update()
 {
-
-	this->updatePollEvents();
 
 	this->updateInput();
 
@@ -267,6 +292,8 @@ void Game::update()
 void Game::renderGUI()
 {
 	this->window->draw(this->pointText);
+	this->window->draw(this->playerHpBarBack);
+	this->window->draw(this->playerHpBar);
 }
 
 void Game::renderBackground()
@@ -292,6 +319,11 @@ void Game::render()
 		enemy->render(this->window);
 	}
 	this->renderGUI();
+
+	//Gameover
+	if (this->player->getHp() <= 0)
+		this->window->draw(this->gameoverText);
+
 	this->window->display();
 }
 

@@ -11,7 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
-
+#include <math.h>
 #include "Player.h"
 #include "Shot.h"
 #include "Enemy.h"
@@ -29,6 +29,10 @@ private:
 	//GUI
 	sf::Font font;
 	sf::Text pointText;
+	sf::Text gameoverText;
+	//Hp bar
+	sf::RectangleShape playerHpBar;
+	sf::RectangleShape playerHpBarBack;
 
 	//Background
 	sf::Texture backgroundTexture;
