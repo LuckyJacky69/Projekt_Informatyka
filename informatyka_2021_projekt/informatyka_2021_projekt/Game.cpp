@@ -15,7 +15,6 @@ void Game::initTextures()
 	this->textures["SHOT"] = new sf::Texture();
 	if (!this->textures["SHOT"]->loadFromFile("Textures/shot.png"))
 		std::cout << "ERROR - file shot.png is missing." << "\n";
-	
 }
 void Game::initGUI()
 {
@@ -114,16 +113,19 @@ void Game::run()
 	}		
 }
 //natural closing game
+
 void Game::updatePollEvents()
 {
+	
 	sf::Event x;
 	while (this->window->pollEvent(x))
 	{
 		if (x.Event::type == sf::Event::Closed)
 			this->window->close();
 		if (x.Event::KeyPressed && x.Event::key.code == sf::Keyboard::Escape)
-			this->window->close();
+			this->window->close();	
 	}
+	
 }
 
 void Game::updateInput()
@@ -154,7 +156,6 @@ void Game::updateGUI()
 	this->pointText.setString(ss.str());
 	float hpPercent = static_cast<float>(this->player->getHp()) / this->player->getHpMax();
 	this->playerHpBar.setSize(sf::Vector2f(150.f * hpPercent, this->playerHpBar.getSize().y));
-
 }
 
 void Game::updateWorld()

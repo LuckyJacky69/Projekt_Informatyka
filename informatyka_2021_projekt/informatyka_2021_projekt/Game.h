@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <Windows.h>
-#include <cstdlib>
+#include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
 #include <string>
@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "Shot.h"
 #include "Enemy.h"
+#include "Menu.h"
 
 class Game
 {
