@@ -16,11 +16,11 @@ public:
 	void render();
 	void initDelay(int my_delay);
 	void update();
+	int selectedItemIndex = 0;
+	int menu_selected_flag = 0;
 private:
 	sf::Sprite background;
 	sf::Texture backgroundTexture;
-	int selectedItemIndex=0;
-	int menu_selected_flag = 0;
 	sf::Font font;
 	sf::Text menu[MAX_LEVEL];
 

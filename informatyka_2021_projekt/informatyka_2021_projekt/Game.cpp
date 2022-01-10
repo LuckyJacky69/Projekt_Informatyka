@@ -128,7 +128,7 @@ void Game::updatePollEvents()
 	
 }
 
-void Game::updateInput()
+void Game::updateInput()												//sterowanie
 {
 	//Movement process (Player)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
@@ -257,7 +257,7 @@ void Game::updateCombat()
 		{
 			if (this->enemies[i]->getBounds().intersects(this->shots[k]->getBounds()))
 			{
-				this->points += this->enemies[i]->getPoints();
+				this->points += this->enemies[i]->getPoints();		//getting points for the enemy
 
 				delete this->enemies[i];
 				this->enemies.erase(this->enemies.begin() + i);
