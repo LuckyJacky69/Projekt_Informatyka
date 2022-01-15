@@ -34,6 +34,47 @@ void Game::initGUI()
 	this->gameoverText.setPosition(sf::Vector2f(180.f, 180.f));
 	this->gameoverText.setString("Gameover!");
 
+	this->continueText.setFont(this->font);
+	this->continueText.setCharacterSize(40);
+	this->continueText.setFillColor(sf::Color::Blue);
+	this->continueText.setPosition(sf::Vector2f(10.f, 280.f));
+	this->continueText.setString("Czy na pewno chcesz wyjsc z gry?");
+
+	this->continueText_1.setFont(this->font);
+	this->continueText_1.setCharacterSize(20);
+	this->continueText_1.setFillColor(sf::Color::Blue);
+	this->continueText_1.setPosition(sf::Vector2f(30.f, 360.f));
+	this->continueText_1.setString("Wcisnij enter jesli chcesz wyjsc lub F2 jesli chcesz kontynowac.");
+
+	this->help.setSize(sf::Vector2f(640.f, 480.f));													//help rectangle after clicking F1
+	this->help.setFillColor(sf::Color::Black);
+	this->help.setPosition(sf::Vector2f(0.f, 0.f));
+
+	this->helpText.setFont(this->font);
+	this->helpText.setCharacterSize(40);
+	this->helpText.setFillColor(sf::Color::Cyan);
+	this->helpText.setPosition(sf::Vector2f(40.f, 50.f));
+	this->helpText.setString("Witaj w grze FAR FROM HOME!");
+
+	this->helpText_1.setFont(this->font);
+	this->helpText_1.setCharacterSize(20);
+	this->helpText_1.setFillColor(sf::Color::White);
+	this->helpText_1.setPosition(sf::Vector2f(40.f, 150.f));
+	this->helpText_1.setString("Prowadzisz statek kosmiczny poprzez klawisze: W,A,S,D.");
+
+	this->helpText_2.setFont(this->font);
+	this->helpText_2.setCharacterSize(20);
+	this->helpText_2.setFillColor(sf::Color::White);
+	this->helpText_2.setPosition(sf::Vector2f(40.f,210.f));
+	this->helpText_2.setString("Mozesz strzelac wciskajac spacje. Unikaj asteroid!");
+
+	this->helpText_3.setFont(this->font);
+	this->helpText_3.setCharacterSize(20);
+	this->helpText_3.setFillColor(sf::Color::White);
+	this->helpText_3.setPosition(sf::Vector2f(140.f, 380.f));
+	this->helpText_3.setString("Wroc do gry, klikajac przycisk F2!");
+
+
 	//Player hp' bar
 	this->playerHpBar.setSize(sf::Vector2f(150.f, 10.f));
 	this->playerHpBar.setFillColor(sf::Color::Red);
@@ -96,18 +137,32 @@ Game::~Game()
 	{
 		delete i;
 	}
-
 }
-
 //Public functions
 
 void Game::run()
 {
+
 	while (this->window->isOpen() ) 
 	{
 		this->updatePollEvents();
-
-		if(this->player-> getHp() > 0)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F1))
+		{
+			play = 0;		
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F2))
+		{
+			play = 1;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
+		{
+			play = 2;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter) && play==2)
+		{
+			this->window->close();
+		}
+		if(this->player-> getHp() > 0 && play==1)
 			this->update();
 		this->render();
 	}		
@@ -116,16 +171,14 @@ void Game::run()
 
 void Game::updatePollEvents()
 {
-	
 	sf::Event x;
 	while (this->window->pollEvent(x))
 	{
 		if (x.Event::type == sf::Event::Closed)
 			this->window->close();
-		if (x.Event::KeyPressed && x.Event::key.code == sf::Keyboard::Escape)
-			this->window->close();	
+		//if (x.Event::KeyPressed && x.Event::key.code == sf::Keyboard::Escape)
+			//this->window->close();	
 	}
-	
 }
 
 void Game::updateInput()												//sterowanie
@@ -139,7 +192,6 @@ void Game::updateInput()												//sterowanie
 		this->player->move(-1.f, 0.f);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 		this->player->move(1.f, 0.f);
-
 	//shooting with space and attacking
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && this-> player->canAttack())
 	{
@@ -150,7 +202,7 @@ void Game::updateInput()												//sterowanie
 void Game::updateGUI()
 
 {	
-	//setting points
+	//setting points, live drawing (44+2=46, 44+'2'=442)
 	std::stringstream ss;
 	ss << "Score: "<<this->points;
 	this->pointText.setString(ss.str());
@@ -230,7 +282,7 @@ void Game::updateEnemies()
 			//deleting enemy (erasing memory) as they reach -100 width
 
 			delete this->enemies.at(counter);
-			this->enemies.erase(this->enemies.begin() + counter);
+			this->enemies.erase(this->enemies.begin() + counter);			//erasing enemy(pointing on counter's number enemy)
 			
 			//--counter;
 			//checking ^std::cout <<this->shots.size() <<"\n";
@@ -239,6 +291,7 @@ void Game::updateEnemies()
 		{
 			//deleting enemy (erasing memory) as they interact with player's position
 			this->player->loseHp(this->enemies.at(counter)->getDamage());
+
 			delete this->enemies.at(counter);
 			this->enemies.erase(this->enemies.begin() + counter);
 			--counter;
@@ -324,7 +377,19 @@ void Game::render()
 	//Gameover
 	if (this->player->getHp() <= 0)
 		this->window->draw(this->gameoverText);
-
+	if (play == 0)
+	{
+		this->window->draw(this->help);
+		this->window->draw(this->helpText);
+		this->window->draw(this->helpText_1);
+		this->window->draw(this->helpText_2);
+		this->window->draw(this->helpText_3);
+	}
+	if (play == 2)
+	{
+		this->window->draw(this->continueText);
+		this->window->draw(this->continueText_1);
+	}
 	this->window->display();
 }
 

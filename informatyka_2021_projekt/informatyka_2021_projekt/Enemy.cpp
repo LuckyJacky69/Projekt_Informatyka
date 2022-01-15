@@ -1,5 +1,7 @@
 #include "Enemy.h"
 #include "Game.h"
+
+
 void Enemy::initVariables()
 {
 	this->pointCount = rand() % 8+ 2;										//2 <x< 10

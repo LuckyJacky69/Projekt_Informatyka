@@ -1,10 +1,11 @@
 #include "Player.h"
+#include "Menu.h"
 #include <iostream>
 
 //ms inicjation
 void Player::initVariables()
 {
-	this->movementSpeed = 2.f;
+	this->movementSpeed = 2;
 	this->attackCooldownMax = 20.f;
 	this->attackCooldown = this->attackCooldownMax;
 	this->hpMax = 100;

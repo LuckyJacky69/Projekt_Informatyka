@@ -1,10 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
-
+#include "Menu.h"
 class Enemy
 {
 private:
+
 	sf::CircleShape shape;
 	sf::Texture texture;
 	float pointCount;
@@ -17,7 +18,6 @@ private:
 
 	int randTexture;
 	void initTexture();
-
 	void initShape();
 	void initVariables();
 

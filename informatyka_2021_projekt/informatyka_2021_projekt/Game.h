@@ -15,7 +15,7 @@
 #include "Player.h"
 #include "Shot.h"
 #include "Enemy.h"
-#include "Menu.h"
+
 
 class Game
 {
@@ -31,6 +31,12 @@ private:
 	sf::Font font;
 	sf::Text pointText;
 	sf::Text gameoverText;
+	sf::Text continueText;
+	sf::Text continueText_1;
+	sf::Text helpText;
+	sf::Text helpText_1;
+	sf::Text helpText_2;
+	sf::Text helpText_3;
 	//Hp bar
 	sf::RectangleShape playerHpBar;
 	sf::RectangleShape playerHpBarBack;
@@ -39,9 +45,11 @@ private:
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
 
+	sf::RectangleShape help;
+
 	//System
 	unsigned points;
-
+	int play = 1;
 	//creating player
 	Player* player;
 
@@ -61,7 +69,6 @@ private:
 public:
 	Game();
 	virtual ~Game();
-
 	// functions
 	void run();
 	void updatePollEvents();
