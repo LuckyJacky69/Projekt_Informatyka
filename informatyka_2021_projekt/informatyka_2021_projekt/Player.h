@@ -8,12 +8,12 @@ private:
 	sf::Texture texture;
 
 	//attributes
+	int hp=100;
+	int hpMax;
+	int damage;
 	float movementSpeed;
 	float attackCooldown;
 	float attackCooldownMax;
-
-	int hp;
-	int hpMax;
 
 	//functions priv
 	void initVariables();
@@ -22,13 +22,13 @@ private:
 	void initGui();
 
 public:
-	Player();
+	Player(float hp);
 	virtual ~Player();
-
 	//Accessor
 	const sf::Vector2f& getPos() const;
 	const sf::FloatRect getBounds() const;
 	const int& getHp() const;
+	const int& getDamage() const;
 	const int& getHpMax() const;
 	//Modifiers
 

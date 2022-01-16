@@ -1,8 +1,10 @@
 #include "Menu.h"
 #include "Game.h"
 
-Menu::Menu(float width, float height)
+Menu::Menu(float width, float height, double *converter)
 {
+	this->converter = converter;
+
 	if(!font.loadFromFile("arial.ttf"))
 		std::cout << "ERROR - file arial.ttf is missing." << "\n";
 
@@ -24,7 +26,7 @@ Menu::Menu(float width, float height)
 
 		menu[2].setFont(font);
 		menu[2].setFillColor(sf::Color::White);
-		menu[2].setString("Wczytaj gre");
+		menu[2].setString("Wczytaj poprzednia gre");
 		menu[2].setPosition(sf::Vector2f(width / 4, height / (MAX_LEVEL + 1) * 3));
 
 		menu[3].setFont(font);
@@ -79,40 +81,35 @@ void Menu::change_diff()
 	diff_level++;
 	if (diff_level > 2)
 		diff_level = 0;	
-	std::cout << diff_level;
+	std::cout << "\n"<<diff_level;
 	if (diff_level == 0)
 	{
 		menu[1].setString("Difficulty level: Easy");
-		converter = 0.75;
+		*converter = 0.7;
 	}
 	else if (diff_level == 1)
 	{
 		menu[1].setString("Difficulty level: Medium");
-		converter = 1;
+		*converter = 1;
 	}
 	else if (diff_level == 2)
 	{
 		menu[1].setString("Difficulty level: Hard");
-		converter = 1.25;
+		*converter = 3;
 	}
-}
-void Menu::getConverter(float x)
-{
-	x=converter;
 }
 
 void Menu::initDelay(int my_delay)
 {
-		sf::Clock zegar;
-		sf::Time czas;
-		while (1)
+	sf::Clock zegar;
+	sf::Time czas;
+	while (1)
+	{
+		czas = zegar.getElapsedTime();
+		if (czas.asMilliseconds() > my_delay)
 		{
-			czas = zegar.getElapsedTime();
-			if (czas.asMilliseconds() > my_delay)
-			{
-				zegar.restart();
-				break;
-			}
+			zegar.restart();
+			break;
 		}
+	}
 }
-

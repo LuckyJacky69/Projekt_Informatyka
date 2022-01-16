@@ -6,7 +6,8 @@
 void Player::initVariables()
 {
 	this->movementSpeed = 2;
-	this->attackCooldownMax = 20.f;
+	this->damage = 3.3;
+	this->attackCooldownMax = 15.f;
 	this->attackCooldown = this->attackCooldownMax;
 	this->hpMax = 100;
 	this->hp = this->hpMax;
@@ -30,10 +31,10 @@ void Player::initSprite()
 	this->sprite.scale(1.5f, 1.5f);
 }
 
-
-Player::Player()
+Player::Player(float hp)
 {
 	this->initVariables(); 
+	this->hp = hp;
 	this->initTexture();
 	this->initSprite();
 }
@@ -59,12 +60,15 @@ const int& Player::getHp() const
 	return this->hp;
 }
 
+const int& Player::getDamage() const
+{
+	return this->damage;
+}
 const int& Player::getHpMax() const
 {
 	return this->hpMax;
 }
 
-// is that important?
 void Player::setPosition(const sf::Vector2f pos)
 {
 	this->sprite.setPosition(pos);

@@ -15,8 +15,6 @@
 #include "Player.h"
 #include "Shot.h"
 #include "Enemy.h"
-
-
 class Game
 {
 private:
@@ -26,6 +24,7 @@ private:
 	//Resources
 	std::map<std::string, sf::Texture*> textures;
 	std::vector<Shot*> shots;							//Shot* because we are creating new projectiles, not copying 1.
+	FILE* fp;
 
 	//GUI
 	sf::Font font;
@@ -37,6 +36,7 @@ private:
 	sf::Text helpText_1;
 	sf::Text helpText_2;
 	sf::Text helpText_3;
+	sf::Text helpText_4;
 	//Hp bar
 	sf::RectangleShape playerHpBar;
 	sf::RectangleShape playerHpBarBack;
@@ -44,14 +44,19 @@ private:
 	//Background
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
+	
+	//collision explosion
 
-	sf::RectangleShape help;
+	sf::RectangleShape help;							//pressing F1 or Esc (background)
 
 	//System
-	unsigned points;
+	unsigned points;	
 	int play = 1;
+	float player_hp;
+
 	//creating player
 	Player* player;
+	double converter=1;
 
 	//Enemy
 	float spawnTimer;		
@@ -62,15 +67,17 @@ private:
 	void initTextures();
 	void initGUI();
 	void initBackground();
-	void initSystems();
 	void initPlayer();
 	void initEnemies();
 
 public:
 	Game();
 	virtual ~Game();
-	// functions
-	void run();
+
+	void file_load();
+	void file_save();
+	void run(double converter);
+	void run_load(double converter);
 	void updatePollEvents();
 	void updateInput();
 	void updateGUI();
@@ -81,6 +88,7 @@ public:
 	void updateCombat();
 	void update();
 	void renderGUI();
+	void renderBoom();
 	void renderBackground();
 	void render();
 };

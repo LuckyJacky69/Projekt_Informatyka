@@ -7,16 +7,17 @@
 class Menu
 {
 public:
-	Menu(float width, float height);
+	Menu(float width, float height, double *converter);
 	void draw(sf::RenderWindow& window);
 	void MoveUp();
 	void MoveDown();
 	int getPressedItem();	
 	float diff_level = 1;
-	float converter = 1;
+	double *converter;
 	void change_diff();
-	void initDelay(int my_delay);	
-	void getConverter(float x) ;
+
+	//Accessors
+	void initDelay(int my_delay);
 
 private:
 	int selectedItemIndex = 0;
@@ -24,11 +25,3 @@ private:
 	sf::Text menu[MAX_LEVEL];
 };
 
-
-
-/*
-
-
-
-
-*/

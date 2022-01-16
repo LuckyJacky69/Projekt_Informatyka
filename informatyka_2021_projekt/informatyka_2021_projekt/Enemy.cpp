@@ -1,16 +1,16 @@
 #include "Enemy.h"
 #include "Game.h"
-
+#include "Menu.h"
 
 void Enemy::initVariables()
 {
-	this->pointCount = rand() % 8+ 2;										//2 <x< 10
+	this->pointCount = rand() % 8+ 2;														//2 <x< 10
 	this->type		 = 0;
-	this->speed		 = pow(this->pointCount, -1)*(-4);						//-2<speed<-1 smaller one should be faster
+	this->speed		 = pow(this->pointCount, -1)*(-4)*this->converter;						//-2<speed<-1 smaller ones should be faster
 	this->hpMax		 = this->pointCount;
 	this->hp		 = this->hpMax;
 	this->damage	 = this->pointCount*2;
-	this->points	 = this->pointCount;
+	this->points	 = this->pointCount * this->converter;
 }
 void Enemy::initTexture()
 {
@@ -38,8 +38,9 @@ void Enemy::initTexture()
 	}
 }
 
-Enemy::Enemy(float pos_x, float pos_y)
+Enemy::Enemy(float pos_x, float pos_y, double converter)
 {
+	this->converter = converter;
 	this->initVariables();
 	this->initTexture();
 	this->initShape();
@@ -71,10 +72,23 @@ const int& Enemy::getDamage() const
 {
 	return this->damage;
 }
-
+const int& Enemy::getHp() const
+{
+	return this->hp;
+}
+void Enemy::setHp(const int hp)
+{
+	this->hp = hp;
+}
+void Enemy::loseHp(const int value)
+{
+	this->hp -= value;
+	if (this->hp <= 0)
+		this->hp = 0;
+}
 void Enemy::update()
 {
-	this->shape.move(this->speed, 0.f);				//enemies moving to the left side + their speed
+	this->shape.move(this->speed, 0.f);				//enemies moving to the left side with their speed
 }
 void Enemy::render(sf::RenderTarget* target)
 {
